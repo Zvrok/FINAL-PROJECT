@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Health App Dashboard</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <!-- Google Material Icons -->
+  <link
+    href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    rel="stylesheet"
+  />
+  <style>
+    /* Reset and base */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: #f9fafb;
+      color: #111827;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+    svg,
+    .material-icons {
+      vertical-align: middle;
+    }
+
+    /* Container constraints */
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      background: white;
+      box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
+      z-index: 1000;
+    }
+    .header-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #cbd5e1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    .user-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .user-name {
+      font-weight: 600;
+      font-size: 1rem;
+      white-space: nowrap;
+    }
+    .user-location {
+      display: flex;
+      align-items: center;
+      font-size: 0.875rem;
+      color: #6b7280;
+      gap: 4px;
+      white-space: nowrap;
+    }
+    .material-icons.location-icon {
+      font-size: 18px;
+      color: #ef4444; /* red */
+    }
+
+    /* Wallet Balance */
+    .wallet-bar {
+      margin: 16px;
+      background: #eef2ff;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-weight: 600;
+      font-size: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #4f46e5; /* indigo */
+      cursor: pointer;
+    }
+    .wallet-bar span {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .wallet-bar .material-icons {
+      font-size: 20px;
+    }
+
+    /* Quick actions grid */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(80px,1fr));
+      gap: 20px;
+      margin: 24px 16px 40px;
+      padding-bottom: 24px;
+    }
+    .action-button {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgb(0 0 0 / 0.05);
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      transition: box-shadow 0.3s ease;
+      user-select: none;
+    }
+    .action-button:hover,
+    .action-button:focus {
+      box-shadow: 0 6px 12px rgb(0 0 0 / 0.1);
+      outline: none;
+    }
+    .action-icon {
+      background: #e0e7ff;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+    }
+    .action-icon img {
+      width: 28px;
+      height: 28px;
+    }
+    .action-label {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: #374151;
+      text-align: center;
+    }
+
+    /* Promo section */
+    .promo-section {
+      margin: 0 16px 40px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgb(0 0 0 / 0.1);
+    }
+    .promo-image {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 7;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* Featured product cards (scroll horizontal on mobile) */
+    .featured-products {
+      margin: 0 16px 40px;
+    }
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 20px;
+    }
+    .product-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgb(0 0 0 / 0.05);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: box-shadow 0.3s ease;
+    }
+    .product-card:hover {
+      box-shadow: 0 8px 20px rgb(0 0 0 / 0.15);
+    }
+    .product-image {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      background: #dbeafe;
+    }
+    .product-label {
+      padding: 12px 10px 14px;
+      font-weight: 600;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #1f2937;
+    }
+
+    /* Navigation Bar Footer */
+    nav.footer-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: white;
+      box-shadow: 0 -1px 6px rgb(0 0 0 / 0.1);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0;
+      z-index: 1000;
+    }
+    nav.footer-nav button {
+      background: none;
+      border: none;
+      color: #6b7280;
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      padding: 6px 0;
+      transition: color 0.3s ease;
+      width: 56px;
+    }
+    nav.footer-nav button .material-icons {
+      font-size: 24px;
+    }
+    nav.footer-nav button.active,
+    nav.footer-nav button:hover {
+      color: #4f46e5;
+    }
+
+    /* Responsive breakpoints */
+
+    /* Mobile: 320px - 767px */
+    @media (max-width: 767px) {
+      .quick-actions {
+        grid-template-columns: repeat(4, 1fr);
+        margin: 8px 8px 32px;
+        gap: 12px;
+      }
+      .action-icon {
+        width: 40px;
+        height: 40px;
+      }
+      .action-icon img {
+        width: 24px;
+        height: 24px;
+      }
+      .product-card {
+        max-width: 130px;
+      }
+    }
+
+    /* Desktop: 768px - 1439px */
+    @media (min-width: 768px) and (max-width: 1439px) {
+      main {
+        max-width: 1024px;
+        margin: 0 auto 80px;
+      }
+      .quick-actions {
+        grid-template-columns: repeat(6, 1fr);
+        margin: 32px 0 48px;
+      }
+      .action-icon {
+        width: 52px;
+        height: 52px;
+      }
+      .action-icon img {
+        width: 30px;
+        height: 30px;
+      }
+      .product-card {
+        max-width: none;
+      }
+      nav.footer-nav {
+        position: relative;
+        justify-content: flex-start;
+        background: transparent;
+        box-shadow: none;
+        padding: 0;
+        width: auto;
+        margin-top: 48px;
+      }
+      nav.footer-nav button {
+        width: auto;
+        flex-direction: row;
+        font-size: 14px;
+      }
+      nav.footer-nav button .material-icons {
+        font-size: 28px;
+        margin-right: 8px;
+      }
+    }
+
+    /* Large Desktop: 1440px+ */
+    @media (min-width: 1440px) {
+      main {
+        max-width: 1300px;
+        margin: 0 auto 100px;
+      }
+      .quick-actions {
+        margin: 40px 0 64px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header aria-label="Application Header">
+    <div class="header-inner container">
+      <div class="user-info" tabindex="0" role="button" aria-haspopup="true" aria-label="User menu">
+        <div class="user-avatar" aria-hidden="true">
+          <img
+            src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/1d986098-1076-4734-acee-62d3e0e9c229.png"
+            alt="Profile picture of Ahmad Fitra"
+            loading="lazy"
+          />
+        </div>
+        <div>
+          <div class="user-name">Ahmad Fitra M.</div>
+          <div class="user-location">
+            <span class="material-icons location-icon" aria-hidden="true"
+              >location_on</span
+            >
+            Lobby Kantor
+          </div>
+        </div>
+      </div>
+      <button
+        aria-label="Open location settings"
+        style="background:none; border:none; cursor:pointer; color:#ef4444;"
+      >
+        <span class="material-icons">place</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container" role="main">
+    <!-- Wallet Balance -->
+    <a href="#" class="wallet-bar" aria-label="Wallet balance: 0 Koin, go to wallet details">
+      <span><strong>halocoins</strong> Saldo : 0 Koin</span>
+      <span class="material-icons" aria-hidden="true">chevron_right</span>
+    </a>
+
+    <!-- Quick Actions -->
+    <section aria-label="Quick access functions" class="quick-actions" role="list">
+      <div class="action-button" role="listitem" tabindex="0" aria-label="Chat dengan Dokter">
+        <div class="action-icon" aria-hidden="true">
+          <img
+            src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/70a6ae4e-1ce2-42a3-8872-4b2f914f9815.png"
+            alt="Chat doctor icon"
+            loading="lazy"
+          />
+        </div>
+        <div class="action-label">Chat dengan Dokter</div>
+      </div>
+      <div class="action-button" role="listitem" tabindex="0" aria-label="Toko Kesehatan">
+        <div class="action-icon" aria-hidden="true">
+          <img
+            src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d4e5769f-af45-4881-b16d-b01f5f4da403.png"
+            alt="Health store icon"
+            loading="lazy"
+          />
+        </div>
+        <div class="action-label">Toko Kesehatan</div>
+      </div>
+      <div class="action-button" role="listitem" tabindex="0" aria-label="Homecare">
+        <div class="action-icon" aria-hidden="true">
+          <img
+            src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c0d87331-e7f4-431d-8288-7aa870210543.png"
+            alt="Homecare icon"
+            loading="lazy"
+          />
+        </div>
+        <div class="action-label">Homecare</div>
+      </div>
+      <div class="action-button" role="listitem" tabindex="0" aria-label="AsuransiKu">
+        <div class="action-icon" aria-hidden="true">
+          <img
+            src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ea850709-2836-4ee9-9b1f-c2ad4175f225.png"
+            alt="Insurance icon"
+            loading="lazy"
+          />
+        </div>
+        <div class="action-label">AsuransiKu</div>
+      </div>
+      <div class="action-button" role="listitem" tabindex="0" aria-label="Gizi & Metabolisme">
+        <div class="action-icon" aria-hidden="true">
+          <img
+            src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/7ce63d7b-84cc-4375-924e-d42447d7bc5f.png"
+            alt="Nutrition and metabolism icon"
+            loading="lazy"
+          />
+        </div>
+        <div class="action-label">Gizi & Metabolisme</div>
+      </div>
+      <div class="action-button" role="listitem" tabindex="0" aria-label="Kulit Cantik & Sehat">
+        <div class="action-icon" aria-hidden="true">
+          <img
+            src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/692d2b7c-dc9e-4c96-8c4b-0c71f63c4f4d.png"
+            alt="Skin care icon"
+            loading="lazy"
+          />
+        </div>
+        <div class="action-label">Kulit Cantik & Sehat</div>
+      </div>
+      <div class="action-button" role="listitem" tabindex="0" aria-label="Kesehatan Seksual">
+        <div class="action-icon" aria-hidden="true">
+          <img
+            src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/2c02ffe4-b823-4064-947c-fa9581608307.png"
+            alt="Sexual health icon"
+            loading="lazy"
+          />
+        </div>
+        <div class="action-label">Kesehatan Seksual</div>
+      </div>
+      <div class="action-button" role="listitem" tabindex="0" aria-label="Lihat Semua">
+        <div class="action-icon" aria-hidden="true" style="background:#d1d5db;">
+          <span class="material-icons" style="color:#374151; font-size:28px;">apps</span>
+        </div>
+        <div class="action-label">Lihat Semua</div>
+      </div>
+    </section>
+
+    <!-- Promo Section -->
+    <section aria-label="Promotion banner" class="promo-section">
+      <img
+        src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/88263880-52ef-4420-9ee1-6f1f39ec28ca.png"
+        alt="Promotion banner showing trusted, effective medicines to reduce fever"
+        class="promo-image"
+        loading="lazy"
+      />
+    </section>
+
+    <!-- Featured Products -->
+    <section aria-label="Featured health products" class="featured-products">
+      <h2 style="font-weight:700; font-size:1.25rem; margin-bottom:16px;">Produk Kesehatan Andalan</h2>
+      <div class="products-grid" role="list">
+        <div class="product-card" role="listitem" tabindex="0" aria-label="Tanya Luka product">
+          <img
+            src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/cae8e262-8f58-4768-8d95-ed13247f49a8.png"
+            alt="Tanya Luka medicine product packaging"
+            class="product-image"
+            loading="lazy"
+          />
+          <div class="product-label">Tanya Luka</div>
+        </div>
+        <div class="product-card" role="listitem" tabindex="0" aria-label="Batuk & Flu product">
+          <img
+            src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/e0aef0de-3e52-4ebb-be69-9bf877ea9316.png"
+            alt="Batuk and Flu medicine product packaging"
+            class="product-image"
+            loading="lazy"
+          />
+          <div class="product-label">Batuk & Flu</div>
+        </div>
+        <div class="product-card" role="listitem" tabindex="0" aria-label="Ozempic & Orlistat product">
+          <img
+            src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/47643622-a0f6-41c5-80fb-b0695a22f8f7.png"
+            alt="Ozempic and Orlistat medicine product packaging"
+            class="product-image"
+            loading="lazy"
+          />
+          <div class="product-label">Ozempic & Orlistat</div>
+        </div>
+        <div class="product-card" role="listitem" tabindex="0" aria-label="Perawatan product">
+          <img
+            src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ed512b29-394d-42d3-9b55-fc828ec6c961.png"
+            alt="Perawatan health care product packaging"
+            class="product-image"
+            loading="lazy"
+          />
+          <div class="product-label">Perawatan</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer Navigation -->
+  <nav class="footer-nav" role="navigation" aria-label="Primary navigation">
+    <button aria-current="page" class="active" aria-label="Home">
+      <span class="material-icons">home</span>
+      Beranda
+    </button>
+    <button aria-label="Riwayat (history)">
+      <span class="material-icons">history</span>
+      Riwayat
+    </button>
+    <button aria-label="Profil (profile)">
+      <span class="material-icons">person</span>
+      Profil
+    </button>
+    <button aria-label="Pesan (messages)">
+      <span class="material-icons">chat_bubble</span>
+      Pesan
+    </button>
+    <button aria-label="Pengaturan (settings)">
+      <span class="material-icons">settings</span>
+      Pengaturan
+    </button>
+  </nav>
+</body>
+</html>
+
