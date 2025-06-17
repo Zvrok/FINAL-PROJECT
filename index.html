@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login & Register</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <style>
+    /* Reset & Base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: #0b0c1a;
+      color: #e0e0ff;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    a {
+      color: #4f95ff;
+      text-decoration: none;
+    }
+    a:hover, a:focus {
+      text-decoration: underline;
+    }
+
+    /* Responsive Container */
+    .container {
+      max-width: 400px;
+      width: 90%;
+      margin: 48px auto 96px;
+      background: rgba(25, 27, 51, 0.8);
+      border-radius: 12px;
+      padding: 32px 32px 48px;
+      box-shadow: 0 10px 30px rgb(79 149 255 / 0.4);
+      position: relative;
+    }
+    
+    /* Close Button */
+    .close-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1.5px solid #6068a9;
+      background: transparent;
+      color: #6068a9;
+      font-size: 24px;
+      line-height: 32px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.3s ease, border-color 0.3s ease;
+    }
+    .close-btn:hover {
+      border-color: #4f95ff;
+      color: #4f95ff;
+    }
+
+    /* Logo */
+    .logo-wrapper {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .logo-wrapper img {
+      width: 48px;
+      height: 48px;
+      display: inline-block;
+      filter: drop-shadow(0 0 1px #4f95ff);
+    }
+    .logo-text {
+      margin-top: 8px;
+      font-weight: 600;
+      color: #7783e1;
+      font-size: 14px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      user-select: none;
+    }
+
+    /* Form styles */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    label {
+      font-size: 14px;
+      color: #8b8faf;
+      margin-left: 8px;
+      user-select: none;
+    }
+
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+      padding: 12px 70px;
+      border-radius: 24px;
+      border: 1.5px solid #444972;
+      background: #161832;
+      color: #bbc1f7;
+      font-size: 16px;
+      outline-offset: 3px;
+      transition: border-color 0.3s ease;
+    }
+    input[type="email"]:focus,
+    input[type="password"]:focus,
+    input[type="text"]:focus {
+      border-color: #4f95ff;
+      background: #1a1a3f;
+      color: #e0e5ff;
+    }
+    input::placeholder {
+      color: #6d73a8;
+    }
+
+    .checkbox-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #8b8faf;
+      font-size: 14px;
+      user-select: none;
+    }
+    .checkbox-wrapper input {
+      width: 16px;
+      height: 16px;
+      accent-color: #4f95ff;
+      cursor: pointer;
+    }
+
+    .forgot-link {
+      font-size: 14px;
+      color: #4f95ff;
+      cursor: pointer;
+      user-select: none;
+    }
+    .forgot-link:hover,
+    .forgot-link:focus {
+      text-decoration: underline;
+    }
+
+    button[type="button"] {
+      background: #2952ff;
+      color: white;
+      font-weight: 600;
+      padding: 14px 0;
+      border-radius: 9999px;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      user-select: none;
+    }
+    button[type="button"]:hover,
+    button[type="button"]:focus {
+      background: #4f95ff;
+      box-shadow: 0 6px 15px rgb(79 149 255 / 0.6);
+      outline: none;
+    } 
+    .bb {
+        background: #4f95ff;
+      box-shadow: 0 6px 15px rgb(79 149 255 / 0.6);
+      outline: none;
+    }
+
+    /* Switch form link */
+    .switch-form {
+      margin-top: 12px;
+      font-size: 14px;
+      text-align: center;
+      color: #8b8faf;
+    }
+    .switch-form a {
+      font-weight: 600;
+      color: #4f95ff;
+    }
+    .switch-form a:hover,
+    .switch-form a:focus {
+      text-decoration: underline;
+    }
+
+    /* Header */
+    header {
+      background: #151735;
+      padding: 10px 24px;
+      color: #bac0ff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgb(20 23 56 / 0.8);
+    }
+    header .logo-header {
+      font-weight: 700;
+      font-size: 1.4rem;
+      letter-spacing: 0.05em;
+      color: #4f95ff;
+      user-select: none;
+    }
+    header nav a {
+      color: #bac0ff;
+      margin-left: 24px;
+      font-weight: 500;
+      font-size: 1rem;
+    }
+    header nav a:hover,
+    header nav a:focus {
+      color: #4f95ff;
+      text-decoration: underline;
+    }
+    /* Hamburger menu for mobile */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      width: 28px;
+      height: 20px;
+      justify-content: center;
+    }
+    .hamburger span {
+      display: block;
+      height: 3px;
+      border-radius: 2px;
+      background: #4f95ff;
+      width: 100%;
+      transition: all 0.3s ease;
+    }
+
+    /* Mobile menu */
+    .mobile-menu {
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+      background: #1a1a3f;
+      position: absolute;
+      top: 56px;
+      right: 0;
+      padding: 20px 24px;
+      border-radius: 0 0 0 12px;
+      width: 200px;
+      box-shadow: 0 6px 12px rgb(79 149 255 / 0.25);
+      z-index: 90;
+    }
+    .mobile-menu.show {
+      display: flex;
+    }
+
+    /* Footer */
+    footer {
+      background: #151735;
+      padding: 24px;
+      color: #bac0ff;
+      font-size: 14px;
+      text-align: center;
+      margin-top: auto;
+      user-select: none;
+    }
+
+    /* Typography & icons in forms */
+    .input-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #6068a9;
+      pointer-events: none;
+    }
+    .input-wrapper {
+      position: relative;
+      width: 100%;
+    }
+    input {
+      padding-left: 44px;
+    }
+
+    /* Responsive Layout */
+    @media (max-width: 767px) {
+      .container {
+        margin: 24px auto 80px;
+        width: 95%;
+        padding: 24px 20px 40px;
+      }
+      header nav {
+        display: none;
+      }
+      .hamburger {
+        display: flex;
+      }
+    }
+    @media (min-width: 768px) {
+      .mobile-menu {
+        display: none !important;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo-header">MyApp</div>
+    <nav aria-label="Primary navigation">
+      <a href="index.html" tabindex="0">Login</a>
+      <a href="#register" tabindex="0">Register</a>
+    </nav>
+    <button class="hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile Navigation">
+      <a href="index.html" tabindex="0">Login</a>
+      <a href="#register" tabindex="0">Register</a>
+    </nav>
+  </header>
+
+  <!-- Login form container -->
+  <section id="login" class="container" aria-label="Login form">
+    <button class="close-btn" aria-label="Close login form">&times;</button>
+    <div class="logo-wrapper" aria-hidden="true">
+      <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/00f0e22c-e985-4592-a819-d9c0623c2ac8.png" alt="Company logo, shield icon with blue and white colors" />
+      <div class="logo-text">LOGIN</div>
+    </div>
+    <form id="loginForm" autocomplete="on" novalidate>
+      <div class="input-wrapper">
+       <span class="material-icons input-icon" aria-hidden="true">email</span>
+        <input type="email" name="email" id="loginEmail" placeholder="Email" required aria-required="true" />
+      </div>
+
+      <div class="input-wrapper">
+        <span class="material-icons input-icon" aria-hidden="true">lock</span> 
+        <input type="password" name="password" id="loginPassword" placeholder="Password" required aria-required="true" />
+      </div>
+
+      <div style="display:flex; justify-content: space-between; align-items: center;">
+        <label class="checkbox-wrapper" for="rememberMe">
+          <input type="checkbox" id="rememberMe" name="rememberMe" />
+          Remember me
+        </label>
+        <a href="#" class="forgot-link" tabindex="0">Forgot Password?</a>
+      </div>
+
+      <button type="button" onclick="location.href='home.html'" aria-label="Login button">Login</button>
+      <div class="switch-form">
+        Don’t have an account? <a href="#register" id="goToRegister">Create an account</a>
+      </div>
+    </form>
+  </section>
+
+  <!-- Register form container -->
+  <section id="register" class="container" aria-label="Register form" hidden>
+    <button class="close-btn" aria-label="Close registration form">&times;</button>
+    <div class="logo-wrapper" aria-hidden="true">
+      <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/1f87a727-d1ae-417c-97ff-c4dda191e85c.png" alt="Company logo, shield icon with blue and white colors" />
+      <div class="logo-text">REGISTER</div>
+    </div>
+    <form id="registerForm" autocomplete="on" novalidate>
+      <div class="input-wrapper">
+        <span class="material-icons input-icon" aria-hidden="true">person</span>
+        <input type="text" name="username" id="registerUsername" placeholder="Username" required aria-required="true" />
+        <label for="registerUsername" class="visually-hidden">Username</label>
+      </div>
+      <div class="input-wrapper">
+        <span class="material-icons input-icon" aria-hidden="true">email</span>
+        <input type="email" name="email" id="registerEmail" placeholder="Email" required aria-required="true" />
+        <label for="registerEmail" class="visually-hidden">Email address</label>
+      </div>
+      <div class="input-wrapper">
+        <span class="material-icons input-icon" aria-hidden="true">lock</span>
+        <input type="password" name="password" id="registerPassword" placeholder="Password" required aria-required="true" />
+        <label for="registerPassword" class="visually-hidden">Password</label>
+      </div>
+      <div class="input-wrapper">
+        <span class="material-icons input-icon" aria-hidden="true">lock</span>
+        <input type="password" name="confirmPassword" id="registerConfirmPassword" placeholder="Confirm Password" required aria-required="true" />
+        <label for="registerConfirmPassword" class="visually-hidden">Confirm Password</label>
+      </div>
+
+      <button type="submit" aria-label="Register button">Register</button>
+
+      <div class="switch-form">
+        Already have an account? <a href="#login" id="goToLogin">Login here</a>
+      </div>
+    </form>
+  </section>
+
+  <footer>
+    &copy; 2024 MyApp. All rights reserved.
+  </footer>
+
+ <!-- <script>
+    // Mobile menu toggle
+    const hamburger = document.querySelector('.hamburger');
+    const mobileMenu = document.querySelector('.mobile-menu');
+
+    hamburger.addEventListener('click', () => {
+      const expanded = hamburger.getAttribute('aria-expanded') === 'true' || false;
+      hamburger.setAttribute('aria-expanded', !expanded);
+      mobileMenu.classList.toggle('show');
+    });
+
+    // Switch between login and register forms
+    const loginSection = document.getElementById('login');
+    const registerSection = document.getElementById('register');
+    const goToRegister = document.getElementById('goToRegister');
+    const goToLogin = document.getElementById('goToLogin');
+
+    goToRegister.addEventListener('click', e => {
+      e.preventDefault();
+      loginSection.hidden = true;
+      registerSection.hidden = false;
+      registerSection.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    goToLogin.addEventListener('click', e => {
+      e.preventDefault();
+      registerSection.hidden = true;
+      loginSection.hidden = false;
+      loginSection.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // Close buttons
+    document.querySelectorAll('.close-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        loginSection.hidden = true;
+        registerSection.hidden = true;
+      });
+    });
+
+    // Simple form validations (example, customize as needed)
+    document.getElementById('loginForm').addEventListener('submit', e => {
+      e.preventDefault();
+      alert('Login form submitted. Implement your authentication logic.');
+    });
+    document.getElementById('registerForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const pwd = document.getElementById('registerPassword').value;
+      const confirmPwd = document.getElementById('registerConfirmPassword').value;
+      if (pwd !== confirmPwd) {
+        alert('Passwords do not match.');
+        return;
+      }
+      alert('Register form submitted. Implement your registration logic.');
+    });
+  </script>-->
+</body>
+</html>
+
